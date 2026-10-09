@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake N' Pastries · Download</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        /* ---------- Body: scrollable & centered ---------- */
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            background: #ffffff;
+            background-attachment: fixed;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            color: #111111;
+        }
+
+        /* ---------- Card ---------- */
+        .card {
+            background: #ffffff;
+            max-width: 680px;
+            width: 100%;
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 8px 20px -6px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border: 1px solid #e5e5e5;
+            transition: all 0.2s ease;
+            margin: auto;
+            flex-shrink: 0;
+        }
+
+        /* ---------- Small screen tweaks ---------- */
+        @media (max-width: 480px) {
+            .card {
+                padding: 2rem 1.25rem;
+                border-radius: 2rem;
+            }
+            body {
+                padding: 1rem;
+                align-items: flex-start;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+            .subhead {
+                font-size: 1rem;
+            }
+            .download-btn {
+                font-size: 1.2rem;
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            .greeting {
+                font-size: 1.1rem;
+                padding: 0.35rem 1.1rem;
+            }
+        }
+
+        /* ---------- Text & headings ---------- */
+        .greeting {
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+            color: #111111;
+            background: #f5f5f5;
+            display: inline-block;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h1 span {
+            color: #000000;
+            background: linear-gradient(135deg, #000000, #444444);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .subhead {
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            border-bottom: 2px dashed #cccccc;
+            padding-bottom: 1.25rem;
+            display: inline-block;
+        }
+
+        /* ---------- Download button ---------- */
+        .download-btn {
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 60px;
+            padding: 1.2rem 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.35), 0 4px 10px -4px rgba(0, 0, 0, 0.25);
+            transition: all 0.2s ease;
+            letter-spacing: 0.02em;
+            border: 1px solid #000000;
+        }
+
+        .download-btn i {
+            font-size: 1.6rem;
+        }
+
+        .download-btn:hover {
+            background: #222222;
+            box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.45), 0 6px 12px -4px rgba(0, 0, 0, 0.3);
+            transform: scale(1.01);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+            background: #000000;
+            box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        .file-hint {
+            font-size: 0.9rem;
+            color: #555555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-hint i {
+            color: #000000;
+            font-size: 1rem;
+        }
+
+        /* ---------- Modal ---------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: 2rem;
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem 1.8rem 1.8rem;
+            box-shadow: 0 40px 60px -15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+            border: 1px solid #e0e0e0;
+            margin: auto;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: #000000;
+            font-size: 2.4rem;
+            border: 2px solid #d0d0d0;
+        }
+
+        .modal-box h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .modal-box p {
+            color: #333333;
+            font-size: 1.05rem;
+            margin-bottom: 1.8rem;
+            line-height: 1.5;
+            padding: 0 0.25rem;
+        }
+
+        .modal-box p strong {
+            color: #000000;
+            font-weight: 600;
+            background: #f0f0f0;
+            padding: 0.1rem 0.3rem;
+            border-radius: 6px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.9rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            border: none;
+            border-radius: 60px;
+            padding: 0.9rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            flex: 1 1 0;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .modal-btn.confirm {
+            background: #000000;
+            color: #ffffff;
+            box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-btn.confirm:hover {
+            background: #222222;
+            box-shadow: 0 10px 18px -6px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-btn.cancel {
+            background: #f5f5f5;
+            color: #111111;
+            border: 1px solid #d0d0d0;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #e8e8e8;
+            border-color: #b0b0b0;
+        }
+
+        /* ---------- Footer note & GH badge ---------- */
+        .footer-note {
+            margin-top: 1.8rem;
+            font-size: 0.8rem;
+            color: #888888;
+            letter-spacing: 0.02em;
+        }
+
+        .gh-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffffff;
+            border: 1px solid #d0d0d0;
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            margin-top: 1.6rem;
+            font-size: 0.9rem;
+            color: #111111;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .gh-badge i {
+            color: #000000;
+            font-size: 1.1rem;
+        }
+
+        .gh-badge:hover {
+            background: #fafafa;
+            border-color: #999999;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="card">
+        <div class="greeting">👋 Hello there!</div>
+
+        <h1>
+            I'm <span>Irene Villaceran</span><br>
+            3rd Year IT
+        </h1>
+
+        <div class="subhead">
+            building this mobile application <strong>Cake N' Pastries</strong>
+        </div>
+
+        <button class="download-btn" id="downloadButton" aria-label="Download Cake N' Pastries APK">
+            <i class="fas fa-download"></i> Download APK
+        </button>
+
+        <div class="file-hint">
+            <i class="fas fa-file-archive"></i> cakeNpastries.apk
+        </div>
+
+
+        <div class="footer-note">
+            ⚡ Click download, confirm, and enjoy Cake N' Pastries!
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <h3>Ready to download?</h3>
+            <p>
+                You're about to download <strong>cakeNpastries.apk</strong>.<br>
+                Make sure "Install from unknown sources" is allowed.
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelModalBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="modal-btn confirm" id="confirmDownloadBtn">
+                    <i class="fas fa-check"></i> Yes, download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const downloadButton = document.getElementById('downloadButton');
+            const modal = document.getElementById('confirmationModal');
+            const cancelModalBtn = document.getElementById('cancelModalBtn');
+            const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
+
+            const APK_FILENAME = 'cakeNpastries.apk';
+
+            function openModal() {
+                modal.classList.add('active');
+                confirmDownloadBtn.focus();
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                downloadButton.focus();
+            }
+
+            function triggerDownload() {
+                const link = document.createElement('a');
+                link.href = APK_FILENAME;
+                link.download = APK_FILENAME;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                console.log('✅ Download started for:', APK_FILENAME);
+            }
+
+            downloadButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                openModal();
+            });
+
+            cancelModalBtn.addEventListener('click', closeModal);
+
+            confirmDownloadBtn.addEventListener('click', function() {
+                closeModal();
+                setTimeout(triggerDownload, 120);
+            });
+
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) closeModal();
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
